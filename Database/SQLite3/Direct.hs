@@ -178,9 +178,11 @@ instance Show Utf8 where
 instance IsString Utf8 where
     fromString = Utf8 . T.encodeUtf8 . T.pack
 
+instance Semigroup Utf8 where
+    (Utf8 a) <> (Utf8 b) = Utf8 (BS.append a b)
+
 instance Monoid Utf8 where
     mempty = Utf8 BS.empty
-    mappend (Utf8 a) (Utf8 b) = Utf8 (BS.append a b)
     mconcat = Utf8 . BS.concat . map (\(Utf8 s) -> s)
 
 packUtf8 :: a -> (Utf8 -> a) -> CString -> IO a
